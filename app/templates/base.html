@@ -11,6 +11,19 @@
         MyApp: <a href="{{ url_for('index') }}">Главная</a>
         <a href="{{ url_for('login') }}">Войти</a>
 
-        {% block content %}{% endblock %}
+        {% block content %}
+            {% with messages = get_flashed_messages() %}
+
+            {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+
+            {% block app_content %}{% endblock %}
+        {% endblock %}
     </body>
 </html>
