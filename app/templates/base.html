@@ -9,11 +9,16 @@
     </head>
     <body>
         MyApp: <a href="{{ url_for('index') }}">Главная</a>
-        <a href="{{ url_for('login') }}">Войти</a>
+        {% if current_user.is_authenticated %}
+            <a href="{{ url_for('lk') }}">Личный кабинет</a>
+            <a href="{{ url_for('logout') }}">Выйти</a>
+        {% else %}
+            <a href="{{ url_for('register') }}">Регистрация</a>
+            <a href="{{ url_for('login') }}">Войти</a>
+        {% endif %}
 
         {% block content %}
             {% with messages = get_flashed_messages() %}
-
             {% if messages %}
             <ul>
                 {% for message in messages %}
