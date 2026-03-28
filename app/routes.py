@@ -5,6 +5,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
 from app import db
 from app.models import User
+from datetime import datetime, timezone
 
 @app.route('/')
 @app.route('/index')
@@ -41,8 +42,15 @@ def logout():
 @app.route('/lk', methods=['GET', 'POST'])
 @login_required
 def lk():
-    text = f"Это личный кабинет пользователя {current_user.username}"
+    text = f"Это личный кабинет пользователя {request.args.get('username')}"
     return render_template('lk.html', text=text)
+
+
+@app.route('/user/<username>', methods=['GET', 'POST'])
+@login_required
+def user(username):
+    user = User.query.filter_by(username=username).first()
+    return render_template('user.html', user=user)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -57,5 +65,11 @@ def register():
         db.session.commit()
         flash('Успешная регистрация')
         return redirect(url_for('login'))
-
     return render_template('register.html', title='Register', form=form)
+
+
+@app.before_request
+def before_request():
+    if current_user.is_authenticated:
+        current_user.last_seen = datetime.now(timezone.utc)
+        db.session.commit()

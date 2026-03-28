@@ -10,7 +10,8 @@
     <body>
         MyApp: <a href="{{ url_for('index') }}">Главная</a>
         {% if current_user.is_authenticated %}
-            <a href="{{ url_for('lk') }}">Личный кабинет</a>
+            <a href="{{ url_for('lk', username=current_user.username) }}">Личный кабинет</a>
+            <a href="{{ url_for('user', username=current_user.username) }}">О пользователе</a>
             <a href="{{ url_for('logout') }}">Выйти</a>
         {% else %}
             <a href="{{ url_for('register') }}">Регистрация</a>

@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+    <h1>Информация о пользователе {{ user.username }}</h1>
+    <h2>Последние действия: {{ user.last_seen }}</h2>
+{% endblock %}
